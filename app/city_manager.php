@@ -51,7 +51,7 @@ class CityManager
 				$cityDetail = explode(" ", $cityString);
 				
 				if (count($cityDetail) == 3)
-					$this->cityList[] = new City($cityDetail[0], $cityDetail[1], $cityDetail[2]);
+					$this->cityList[] = new City($cityDetail[0], intval($cityDetail[1]), intval($cityDetail[2]));
 			}
 			
 			fclose($file);
