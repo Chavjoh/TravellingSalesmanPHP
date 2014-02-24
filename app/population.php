@@ -66,7 +66,7 @@ class Population
 	/**
 	 * Pourcent [0, 1]
 	 */
-	public function selectionRoulette($pourcent)
+	public function selectionElitist($pourcent)
 	{
 		uasort($this->solutionList, function($a, $b) {
 			if ($a == $b) 
@@ -76,6 +76,11 @@ class Population
 		});
 		
 		$this->solutionList = array_slice($this->solutionList, 0, round($this->getSize() * $pourcent));
+	}
+	
+	public function selectionRoulette($poucent)
+	{
+		// TODO
 	}
 	
 	public function mutationAll($factor = null)

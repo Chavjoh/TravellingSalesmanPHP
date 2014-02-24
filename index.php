@@ -45,8 +45,8 @@ echo 'initialization <br />';
 
 do 
 {
-	$population->selectionRoulette(0.5);
-	echo 'selectionRoulette <br />';
+	$population->selectionElitist(0.5);
+	echo 'selectionElitist <br />';
 	echo 'size : '.$population->getSize().' <br />';
 	
 	$population->mutationAll(0.01);
