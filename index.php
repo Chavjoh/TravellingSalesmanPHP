@@ -3,7 +3,7 @@
  * Algorithm execution
  *
  * @package TravellingSalesmanPHP
- * @author Chavaillaz Johans
+ * @author Chavaillaz Johan
  * @since 1.0.0
  * @license CC BY-SA 3.0 Unported
  */
@@ -17,6 +17,9 @@ ini_set("auto_detect_line_endings", true);
 
 // Define start time for duration calculation
 define("TIME_START", microtime(true));
+
+// Show debug information
+define("DEBUG", false);
 
 // Include application classes and functions
 require_once('app/functions.php');
@@ -41,23 +44,23 @@ CityManager::getInstance()->loadFromFile('data/pb020.txt');
 // Create and initialize population
 $population = new Population();
 $population->initialization(5000);
-echo 'initialization <br />';
+if (DEBUG) echo 'initialization <br />';
 
 do 
 {
 	$population->selectionElitist(0.5);
-	echo 'selectionElitist <br />';
-	echo 'size : '.$population->getSize().' <br />';
+	if (DEBUG) echo 'selectionElitist <br />';
+	if (DEBUG) echo 'size : '.$population->getSize().' <br />';
 	
 	$population->mutationAll(0.01);
-	echo 'mutationAll <br />';
-	echo 'size : '.$population->getSize().' <br />';
+	if (DEBUG) echo 'mutationAll <br />';
+	if (DEBUG) echo 'size : '.$population->getSize().' <br />';
 	
 	$population->crossoverAll(0.49);
-	echo 'crossoverAll <br />';
-	echo 'size : '.$population->getSize().' <br />';
+	if (DEBUG) echo 'crossoverAll <br />';
+	if (DEBUG) echo 'size : '.$population->getSize().' <br />';
 	
-	echo $population->bestSolution();
+	echo '<p>'.$population->bestSolution().'</p>';
 	
 	$currentTime = microtime(true) - TIME_START;
 }
