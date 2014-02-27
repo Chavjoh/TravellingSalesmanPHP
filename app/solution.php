@@ -11,21 +11,23 @@ class Solution
 {
 	protected $cityList;
 	protected $distance;
+	protected $insertMode;
 	
 	public function __construct()
 	{
 		$this->cityList = array();
 		$this->distance = 0;
+		$this->insertMode = false;
 	}
 	
 	public function addCity(City $city, $distance = -1)
 	{
+		$this->insertMode = true;
+		
 		if ($distance != -1)
 			$this->distance += $distance;
 		else if (count($this->cityList) > 0)
 			$this->distance += $city->getDistance($this->getLastCity());
-		
-		//echo 'addCity (name='.$city->getName().', distance='.$this->distance.')<br />';
 		
 		$this->cityList[] = $city;
 	}
@@ -35,6 +37,8 @@ class Solution
 	 */
 	public function addCityAt(City $city, $index)
 	{
+		$this->insertMode = true;
+		
 		$this->distance += $city->getDistance($this->getLastCity());
 		array_splice($this->cityList, $index, 0, $city); 
 	}
@@ -49,6 +53,8 @@ class Solution
 	
 	public function joinFirstAndLast()
 	{
+		$this->insertMode = false;
+		
 		$this->distance += $this->cityList[0]->getDistance($this->getLastCity());
 	}
 	
@@ -78,6 +84,9 @@ class Solution
 	
 	public function getDistance()
 	{
+		if ($this->insertMode)
+			throw new Exception("You must call Solution::joinFirstAndLast after adding cities.");
+		
 		return $this->distance;
 	}
 	
@@ -88,17 +97,13 @@ class Solution
 	
 	protected function calculateDistance()
 	{
-		$lastCity = null;
+		// First loop, we add distance between first and last city
+		$lastCity = $this->getLastCity();
 		
 		foreach ($this->cityList AS $city)
 		{
-			// First loop, we add distance between first and last city
-			if ($lastCity == null)
-				$this->distance += $city->getDistance($this->getLastCity());
-			
 			// Otherwise calculate distance between last and current city
-			else
-				$this->distance += $lastCity->getDistance($city);
+			$this->distance += $lastCity->getDistance($city);
 			
 			// Save current city to be used as last city in next loop
 			$lastCity = $city;
@@ -112,6 +117,9 @@ class Solution
 	
 	public function __toString()
 	{
+		if ($this->insertMode)
+			throw new Exception("You must call Solution::joinFirstAndLast after adding cities.");
+			
 		$toString = 'Solution(distance='.$this->distance.')';
 		
 		foreach ($this->cityList AS $city)
