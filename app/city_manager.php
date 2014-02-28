@@ -56,5 +56,7 @@ class CityManager
 			
 			fclose($file);
 		}
+		else
+			throw new Exception("City file not found ($fileName).");
 	}
 }

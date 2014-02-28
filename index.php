@@ -22,10 +22,11 @@ define("TIME_START", microtime(true));
 define("DEBUG", false);
 
 // Values for genetic algorithms
-define("GA_POPULATION", 5000);
+define("GA_CITY", 100);
+define("GA_POPULATION", round(abs(log(GA_CITY + 1)) * 1000));
 define("GA_SELECTION", 0.50);
-define("GA_MUTATION", 0.01);
-define("GA_CROSSOVER", 0.49);
+define("GA_MUTATION", 0.1);
+define("GA_CROSSOVER", 0.4);
 
 // Include application classes and functions
 require_once('app/functions.php');
@@ -42,10 +43,16 @@ srand();
  * -> null if calculate until stagnation is detected
  * -> otherwise calculate until maximumTime is reached
  */
-$maximumTime = 30;
+$maximumTime = 90;
 
 // Load city list from data set
-CityManager::getInstance()->loadFromFile('data/pb050.txt');
+CityManager::getInstance()->loadFromFile('data/pb'.GA_CITY.'.txt');
+
+// Current generation identification
+$currentGeneration = 0;
+
+// Execution time of each generation
+$executionTime = array();
 
 // Save best solutions in each loop
 $bestSolutionList = array();
@@ -69,10 +76,14 @@ do
 	if (DEBUG) echo 'crossoverAll <br />';
 	if (DEBUG) echo 'size : '.$population->getSize().' <br />';
 	
-	$bestSolutionList[] = $population->bestSolution();
-	if (DEBUG) echo '<p>'.$bestSolutionList[count($bestSolutionList) - 1].'</p>';
-	
 	$currentTime = microtime(true) - TIME_START;
+	
+	$executionTime[$currentGeneration] = round($currentTime);
+	$bestSolutionList[$currentGeneration] = $population->bestSolution();
+	
+	if (DEBUG) echo '<p> ('.$currentTime.' sec) '.$bestSolutionList[$currentGeneration].'</p>';
+	
+	$currentGeneration++;
 }
 while ($currentTime < $maximumTime OR ($maximumTime == null AND $population->isStagnant(0.01)));
 

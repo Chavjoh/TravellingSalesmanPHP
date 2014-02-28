@@ -161,7 +161,7 @@
 				foreach ($bestSolutionList AS $generation => $solution)
 				{
 				?>	<tr>
-						<td><?=$generation?></td>
+						<td class="text-center"><?=$generation?> <br /> (<?=$executionTime[$generation]?> sec)</td>
 						<td>
 							<?php
 							foreach ($solution->getCityList() AS $city)
@@ -170,7 +170,7 @@
 							}
 							?>
 						</td>
-						<td><?=$solution->getDistance()?></td>
+						<td class="text-center"><?=$solution->getDistance()?></td>
 					
 					</tr>
 				<?php
